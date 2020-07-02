@@ -1,0 +1,54 @@
+<launch>
+  <node pkg="nodelet" type="nodelet" name="manager"  args="manager" output="screen"> 
+    <param name="num_worker_threads" value="20" />
+  </node>
+  
+  <rosparam command="load" file="$(find ur_app)/config/test_ur10_18.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint1.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint2.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint3.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint4.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint5.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint6.yaml" />
+  
+  <node pkg="itia_configuration_manager" type="configuration_manager" name="controller_manager" output="screen"/> 
+  <node pkg="moveit_planning_helper" type="override_manager" name="override_manager" output="screen"/>
+<!--
+  <node pkg="itia_configuration_manager" type="configuration_user_interface" name="configuration_user_interface" output="screen"/> 
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" /> 
+
+-->  
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur10_joint_limited_robot.urdf.xacro'" /> 
+  
+  <arg name="db" default="false" />
+  <arg name="debug" default="false" />
+  <arg name="limited" default="true"/>
+	
+  <include file="$(find ur10_moveit_config)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+    <arg name="limited" value="$(arg limited)"/>
+  </include>
+
+  <include file="$(find ur10_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <include file="$(find ur10_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)"/>
+  
+  <include file="$(find ur10_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>  
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" /> 
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="false"/>
+    <rosparam param="/source_list">[/ur10/joint_states]</rosparam>
+  </node>
+  
+</launch>

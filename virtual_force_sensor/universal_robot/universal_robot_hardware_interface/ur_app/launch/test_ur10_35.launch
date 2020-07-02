@@ -1,0 +1,40 @@
+<launch>
+
+  <param name="num_worker_threads" value="20"/>
+  
+<!-- remove/add double dash in front of "inorder" after you comment/uncomment the below line  -->
+
+<!--  <param name="robot_description" command="$(find xacro)/xacro -inorder '$(find ur_description)/urdf/ur10_joint_limited_robot_table_tool.urdf.xacro'" />-->
+
+  
+  <param name="robot_description" textfile="/home/terrin/.ros/ur10_35_estimated.urdf"/>
+  <rosparam command="load" file="/home/terrin/.ros/ur10_35_estimated_P1_edited.yaml"/>
+
+  <rosparam command="load" file="$(find ur_app)/config/test_ur10_35.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint1.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint2.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint3.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint4.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint5.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint6.yaml" />
+
+  <node pkg="nodelet" type="nodelet" name="manager"  args="manager" output="screen"/>
+  <node pkg="robot_state_publisher" name="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen"/>
+  <node pkg="itia_configuration_manager" type="configuration_manager" name="controller_manager" output="screen"/>
+  <node pkg="moveit_planning_helper" type="override_manager" name="override_manager" output="screen"/>
+
+<!--   <node pkg="user_pack" type="virtual_force_sensor_estimation" name="virtual_force_sensor_estimation"  output="screen"/> 
+      -->
+  
+<!--  <node pkg="rosdyn_core_examples" type="inverse_dynamics" name="inverse_dynamics"  output="screen">
+     <remap from="/joint_states" to="/kalman_filtered_joint_states"/>
+  </node>-->
+
+  <node pkg="rviz" name="$(anon rviz)" type="rviz" respawn="false" args="-d $(find ur10_moveit_config)/launch/moveit.rviz" output="screen"/>
+  <rosparam command="load" file="$(find ur10_moveit_config)/config/kinematics.yaml"/>
+  <include file="$(find ur10_moveit_config)/launch/planning_context.launch"/>
+  <include file="$(find ur10_moveit_config)/launch/move_group.launch"/>
+
+  <node pkg="itia_configuration_manager" type="configuration_user_interface" name="configuration_user_interface" output="screen"/>
+
+</launch>

@@ -1,0 +1,27 @@
+<launch>
+  <node pkg="nodelet" type="nodelet" name="manager"  args="manager" output="screen"> 
+    <param name="num_worker_threads" value="20" />
+  </node>
+  
+  <rosparam command="load" file="$(find ur_app)/config/test_ur10_35.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint1.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint2.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint3.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_ss_joint3.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint4.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint5.yaml" />
+  <rosparam command="load" file="$(find ur_app)/config/ur10_35_joint6.yaml" />
+  
+<!--  <param name="use_gui" value="true"/>
+  <param name="//publish_default_velocities" value="true"/>
+  <param name="/publish_default_efforts" value="true"/>
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+    <remap from="/joint_states" to="/joint_pos_target"/>
+  </node>-->
+  
+  <node pkg="itia_configuration_manager" type="configuration_manager" name="controller_manager" output="screen"/> 
+  <node pkg="itia_configuration_manager" type="configuration_user_interface" name="configuration_user_interface" output="screen"/> 
+  
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur10_joint_limited_robot.urdf.xacro'" />
+
+</launch>

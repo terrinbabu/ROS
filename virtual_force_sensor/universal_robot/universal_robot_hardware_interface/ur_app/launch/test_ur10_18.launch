@@ -1,0 +1,91 @@
+<launch>  
+
+<!-- Parameters-->
+
+<!--    <param name="robot_description" textfile="/home/terrin/.ros/ur10.urdf"/>    -->
+
+<!--    <param name="robot_description" textfile="/home/terrin/.ros/ur10_18_org.urdf"/>
+    <rosparam command="load" file="/home/terrin/.ros/ur10_18_org.yaml"/>-->
+    
+<!--    <param name="robot_description" textfile="/home/terrin/.ros/ur10_18_BPF.urdf"/>
+    <rosparam command="load" file="/home/terrin/.ros/ur10_18_BPF.yaml"/>-->
+    
+<!--    <param name="robot_description" textfile="/home/terrin/.ros/ur10_18_KF.urdf"/>
+    <rosparam command="load" file="/home/terrin/.ros/ur10_18_KF.yaml"/>-->
+    
+<!--    <param name="robot_description" textfile="/home/terrin/.ros/ur10_18_ZPF.urdf"/>
+    <rosparam command="load" file="/home/terrin/.ros/ur10_18_ZPF.yaml"/>-->
+
+<!--    <param name="robot_description" textfile="/home/terrin/.ros/ur10_18_ZPF.urdf"/>
+    <rosparam command="load" file="/home/terrin/.ros/ur10_18_ZPF_BPF.yaml"/>-->
+   
+    <param name="robot_description" textfile="/home/terrin/.ros/ur10_18_ZPF.urdf"/>
+    <rosparam command="load" file="/home/terrin/.ros/ur10_18_ZPF_KF.yaml"/>
+   
+<!-- Parameters Identification 
+    [while uncommenting, edit,
+    args="call wait /..... with two dash lines(-) before wait without space in two places (pkg name="load_nodelet_meto_gen" and "load_nodelet_meto_par_estim" ]-->
+
+<!--<param name="use_sim_time" type="bool" value="false" />
+<rosparam command="load" file="$(find universal_robot_dynident)/config/meto_general_config.yaml" />
+<rosparam command="load" file="$(find universal_robot_dynident)/config/additional_info.yaml" />
+<node pkg="nodelet" type="nodelet" name="meto_binary_logger"  args="manager" output="screen"/>
+<node pkg="nodelet" type="nodelet" name="universal_robot_dynident_manager"  args="manager" output="screen"/>
+<node pkg="rosservice" name="load_nodelet_meto_gen" type="rosservice" args="call wait /universal_robot_dynident_manager/load_nodelet 'meto_gen_interface' 'rosdyn/MetoGenInterfaceNodelet' [''] [''] [''] ''" output="screen" />
+<node pkg="moveit_planning_helper" name="execute_trj_service" type="execute_trj_service" output="screen" />
+<node pkg="rosservice" name="load_nodelet_meto_par_estim" type="rosservice" args="call wait /universal_robot_dynident_manager/load_nodelet 'meto_par_estim_interface' 'rosdyn/MetoParEstimInterfaceNodelet' [''] [''] [''] ''" output="screen" />
+
+<rosparam command="load" file="$(find universal_robot_dynident)/config/binary_logger.yaml" />
+<node pkg="nodelet" type="nodelet" name="binary_logger"  args="manager" output="screen"/>
+<node pkg="binary_logger" type="automatic_logger_node" name="automatic_logger_node" output="screen"/>-->
+
+<!-- Watch and THOR ur10_18 -->
+
+<!--    <param name="num_worker_threads" value="20"/>
+    <rosparam command="load" file="$(find ur_app)/config/test_ur10_18.yaml"/>
+    <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint1.yaml"/>
+    <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint2.yaml"/>
+    <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint3.yaml"/>
+    <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint4.yaml"/>
+    <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint5.yaml"/>
+    <rosparam command="load" file="$(find ur_app)/config/ur10_18_joint6.yaml"/>
+  
+    <node pkg="nodelet" type="nodelet" name="manager"  args="manager" output="screen"/>
+    <node pkg="itia_configuration_manager" type="configuration_manager" name="controller_manager" output="screen"/>
+    <node pkg="itia_configuration_manager" type="configuration_user_interface" name="configuration_user_interface" output="screen"/>-->
+  
+
+<!-- RVIZ and Moveit -->
+
+<!--    <node pkg="robot_state_publisher" name="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen"/>
+    <node pkg="moveit_planning_helper" type="override_manager" name="override_manager" output="screen"/>
+    <node pkg="rviz" name="$(anon rviz)" type="rviz" respawn="false" args="-d $(find ur10_moveit_config)/launch/moveit.rviz" output="screen"/>
+    
+    <rosparam command="load" file="$(find ur10_moveit_config)/config/kinematics.yaml"/>
+    <include file="$(find ur10_moveit_config)/launch/planning_context.launch"/>
+    <include file="$(find ur10_moveit_config)/launch/move_group.launch"/>-->
+    
+
+<!-- Kalman filter -->
+
+ <rosparam command="load" file="$(find user_pack)/config/kalman_filter_joint_state.yaml"/> 
+<!-- <node name="kalman_filter_joint_state" pkg="user_pack" type="kalman_filter_joint_state" output="screen" /> -->
+    
+<!-- Virutal Force Estimation -->
+    
+      <node name="virtual_force_sensor_estimation" pkg="user_pack" type="virtual_force_sensor_estimation" output="screen">  
+<!--         <remap from="/joint_states" to="/kf_joint_states"/> -->
+     </node> 
+    
+<!-- Write Topics -->
+    
+    <arg name="file_path" default="/home/terrin/projects/virtual_force_sensor/files/log_filtering/zero_phase_filter/0kg_all/" />
+    <arg name="file_name" default="pizpf_kf" />
+    
+    <node name="write_rostopic" pkg="user_pack" type="write_rostopic" output="screen">
+       <param name="file_path" value="$(arg file_path)"/>
+       <param name="file_name" value="$(arg file_name)"/>
+<!--       <remap from="/joint_states" to="/kf_joint_states"/>  -->
+    </node>
+
+</launch>

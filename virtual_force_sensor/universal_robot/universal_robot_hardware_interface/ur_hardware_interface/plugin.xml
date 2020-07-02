@@ -1,0 +1,8 @@
+
+<library path="lib/libur_hardware_interface">
+  <class name="itia/control/UrHwIfaceNodelet" type="itia::control::UrHwIfaceNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+      UR nodelet
+    </description>
+  </class>
+</library>

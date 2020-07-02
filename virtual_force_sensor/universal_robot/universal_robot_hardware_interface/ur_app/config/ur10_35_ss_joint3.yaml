@@ -1,0 +1,33 @@
+ur_hi:
+  sslinkpos_to_vel_jnt3_1:
+  
+    controlled_joint: "elbow_joint"
+    type: "itia/control/StateSpacePositionToVelocityController"
+    setpoint_topic_name: "/joint_pos_target"
+    use_target_velocity: true
+    use_target_torque: false
+    use_velocity_innovation: false
+    first_two_states_are_pos_vel: true
+    maximum_velocity: 3.0
+    position_minimum_error: 0.001
+    
+    A:
+    - [1.00000000e+00, 8.00000000e-03 ]
+    - [0.00000000e+00, 6.58792521e-01 ]
+
+    B:
+    - [0.00000000e+00 ]
+    - [3.41207479e-01 ]
+
+    C:
+    - [1.00000000e+00, 0.00000000e+00 ]
+
+    D:
+    - [0.00000000e+00 ]
+
+    K:
+    - [9.88240807e+00, 1.09680456e-01 ]
+
+    L:
+    - [-4.24351352e-02 ]
+    - [4.47236044e+00 ]

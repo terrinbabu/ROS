@@ -1,0 +1,104 @@
+path_tolerance: 0.001
+goal_tolerance: 0.001
+
+robot_description_name: "robot_description"
+move_group: "ur10"
+use_execution_trajectory: false
+ur10:
+  planning_plugin: 
+  - "fart/FartPlannerManager"
+  - "ompl_interface/OMPLPlanner"
+  group_names_map: 
+    ur10: "ur10_planner"
+  ur10_planner:
+    step_size: 0.1 # [rad]
+
+
+list_of_trajectories:
+- ur10_home
+- ur10_meto
+- ur5_home
+
+  
+ur10_home:
+  positions:
+  - [0.0, -1.5708, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, -1.5708, 0.0, 0.0, 0.0, 0.0]
+  velocities:
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  time_from_start:
+  - 0.0
+  - 1.0
+  joint_names:
+  - ur10_shoulder_pan_joint
+  - ur10_shoulder_lift_joint
+  - ur10_elbow_joint
+  - ur10_wrist_1_joint
+  - ur10_wrist_2_joint
+  - ur10_wrist_3_joint
+
+ur5_home:
+  positions:
+  - [0.0, -1.5708, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, -1.5708, 0.0, 0.0, 0.0, 0.0]
+  velocities:
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  time_from_start:
+  - 0.0
+  - 1.0
+  joint_names:
+  - ur5_shoulder_pan_joint
+  - ur5_shoulder_lift_joint
+  - ur5_elbow_joint
+  - ur5_wrist_1_joint
+  - ur5_wrist_2_joint
+  - ur5_wrist_3_joint
+
+ur5_test:
+  positions:
+  - [0.0, -1.5708, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, -2.0708, 0.5, 0.0, 1.5708, 0.0]
+  - [0.0, -1.0708, -0.5, 0.0, 1.5708, 0.0]
+  - [0.0, -1.5708, 0.0, 0.0, 0.0, 0.0]
+  velocities:
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  time_from_start:
+  - 0.0
+  - 0.5
+  - 1.5
+  - 2.0
+  joint_names:
+  - ur5_shoulder_pan_joint
+  - ur5_shoulder_lift_joint
+  - ur5_elbow_joint
+  - ur5_wrist_1_joint
+  - ur5_wrist_2_joint
+  - ur5_wrist_3_joint
+  
+ur10_meto:
+  accelerations:
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  joint_names: [ur10_shoulder_pan_joint, ur10_shoulder_lift_joint, ur10_elbow_joint,
+    ur10_wrist_1_joint, ur10_wrist_2_joint, ur10_wrist_3_joint]
+  positions:
+  - [1.112, -0.44070000000000004, -2.0645000000000002, 0.8443, 2.5162, -1.4201000000000001]
+  - [2.3001, -1.1286, 0.1695, 1.0393000000000001, -0.5588000000000001, 0.3438]
+  - [1.7723, -0.7107, -1.5705, 2.8064, -2.9553000000000003, -2.1812]
+  - [-1.5479, -2.7135000000000002, 0.5498000000000001, 1.3436000000000001, 1.9697, -2.2029]
+  - [0.2725, -2.4541, -1.0605, -2.1814, 2.0176000000000003, -2.2056]
+  time_from_start: [0.0, 6.4, 11.700000000000001, 21.8, 29.1]
+  velocities:
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

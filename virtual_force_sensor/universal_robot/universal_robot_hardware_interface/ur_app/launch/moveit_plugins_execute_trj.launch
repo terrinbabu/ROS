@@ -1,0 +1,13 @@
+<launch>
+  <arg name="trj" default="load" /> 
+  <arg name="robot" default="ur10" /> 
+  <arg name="log_name" default="trj"/> 
+  <arg name="rep" default="1"/> 
+<!--   <param name="/binary_logger/test_name" type="string" value="$(arg log_name)" /> -->
+<!--   <param name="/log_repetition" type="int" value="$(arg rep)" /> -->
+  <rosparam file="$(find ur_app)/config/predefined_position.yaml" command="load"/>
+
+  <param name="/trj_name" value="$(arg trj)"/>
+  <node pkg="moveit_planning_helper" type="execute_trj_plugin" name="execute_trj_plugin" output="screen">
+  </node>
+</launch>

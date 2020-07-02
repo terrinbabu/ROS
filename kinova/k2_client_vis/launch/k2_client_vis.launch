@@ -1,0 +1,12 @@
+<launch>
+   <arg name="seg_sim" default="True"/>
+   
+    <!--<include file="$(find k2_client)/launch/k2_client.launch"/>
+    <node name="rviz" pkg="rviz" type="rviz"/>-->
+
+    
+    <node name="updatetf_with_kin" pkg="k2_client_vis" type="updatetf.py" respawn="false" output="screen">  
+        <param name="seg_sim" value="$(arg seg_sim)"/>  
+    </node>
+
+</launch>

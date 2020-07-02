@@ -1,0 +1,27 @@
+<launch>
+    <param name="serverNameOrIP" value="10.7.7.99"/> 
+    
+    <node pkg="tf" type="static_transform_publisher" name="kinect_base_world" args="1.1573  1.2308 0.9893  -0.7099  0.0415   2.1197 /world /head/skel_depth_frame 100"/>
+    
+<!--K1- old Human tracking trial 1 : 1.0327  1.4245 1.1351   2.5764 -0.0793  -2.2366      results from matlab
+    K1- old Human tracking trial 2 : 1.1573  1.2308 0.9893   2.4317 -0.0415  -2.1197      results from matlab (best result)
+    K1- old Human tracking trial 2 : 1.1573  1.2308 0.9893  -0.7099  0.0415   2.1197      results after rotation from matlab        
+    K1- new Human tracking trial 3 : 0.6967  0.6967 1.0146   2.3277 -0.0041  -2.1476      results from matlab -->
+    
+  <!-- K2 object tracking trial 1 : 0.8412 1.2161 1.1634 2.7321 -0.0359 -2.2474 (2nd best best result)
+       K2 object tracking trial 2 : 0.872  0.4009 1.2735 2.5817 0.0735  -2.3292
+       K2 object tracking trial 3 : 1.1230  0.9459 0.6750 -2.9823 1.0138  -1.8708
+       K2 object tracking trial 4 : 1.1241  1.0716 0.9909 2.4716 -0.01  -2.10 after intrinsic calibration(best result)-->
+    
+    <group ns="/head/kinect2">
+<!--         <param name="rgb_frame" value="/head/kinect2/rgb"/> -->
+<!--         <param name="depth_frame" value="/head/kinect2/depth"/> -->
+<!--         <param name="ir_frame" value="/head/kinect2/depth"/> -->
+        
+<!--        <node name="startRGB" pkg="k2_client" type="startRGB"/>
+        <node name="startDepth" pkg="k2_client" type="startDepth" />
+        <node name="startIR" pkg="k2_client" type="startIR"/>-->
+        <node name="startBody" pkg="k2_client" type="startBody" output ="screen"/>
+<!--        <node name="startAudio" pkg="k2_client" type="startAudio"/>-->
+    </group>
+</launch>

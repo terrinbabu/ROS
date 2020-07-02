@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro"
+       name="ur10" >
+
+  <!-- common stuff -->
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+  <!-- ur10 -->
+  <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />
+
+  <!-- arm -->
+  <xacro:ur10_robot prefix="" joint_limited="true"
+		 shoulder_pan_lower_limit="${-0.95*pi}" shoulder_pan_upper_limit="${0.95*pi}"
+		 shoulder_lift_lower_limit="${-0.95*pi}" shoulder_lift_upper_limit="${0.95*pi}"
+		 elbow_joint_lower_limit="${-0.95*pi}" elbow_joint_upper_limit="${0.95*pi}"
+		 wrist_1_lower_limit="${-0.95*pi}" wrist_1_upper_limit="${0.95*pi}"
+		 wrist_2_lower_limit="${-0.95*pi}" wrist_2_upper_limit="${0.95*pi}"
+		 wrist_3_lower_limit="${-0.95*pi}" wrist_3_upper_limit="${0.95*pi}"
+/>
+
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="2.5 2.5 0.025"/>
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.7 0.7 0.7 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="2.5 2.5 0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="table_joint" type="fixed">
+    <parent link="world" />
+    <child link = "table" />
+    <origin xyz="0 0 -0.001" rpy="0 0 0" />
+  </joint>
+  
+  <link name="sensor">
+    <visual>
+      <geometry>
+        <box size="0.08 0.08 0.04"/>
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.7 0.7 0.7 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.08 0.08 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="sensor_joint" type="fixed">
+    <parent link="wrist_3_link" />
+    <child link = "sensor" />
+    <origin xyz="0 0.12 0" rpy="-1.5708 0 0" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+</robot>

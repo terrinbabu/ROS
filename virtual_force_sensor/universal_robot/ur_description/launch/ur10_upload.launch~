@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="limited" default="false" doc="If true, limits joint range [-PI, PI] on all joints." />
+  
+  <param unless="$(arg limited)" name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur10_robot.urdf.xacro'" />
+  <param if="$(arg limited)" name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur10_joint_limited_robot.urdf.xacro'" />
+
+</launch>
+<!--
+   $(find ur_description)/urdf/ur10_robot.urdf.xacro
+   $(find ur_description)/urdf/ur10_joint_limited_robot.urdf.xacro
+
+	/home/terrin/ros_workspaces/virtual_force_sensor/src/universal_robot/ur10_calibrated/ur10_calibrated.urdf
+-->

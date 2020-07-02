@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro"
+       name="ur10" >
+
+  <xacro:include filename="$(find ur_description)/urdf/ur10_joint_limited_robot.urdf.xacro" />
+  
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="2.5 2.5 0.025"/>
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.7 0.7 0.7 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="2.5 2.5 0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="table_joint" type="fixed">
+    <parent link="world" />
+    <child link = "table" />
+    <origin xyz="0 0 -0.001" rpy="0 0 0" />
+  </joint>
+  
+</robot>

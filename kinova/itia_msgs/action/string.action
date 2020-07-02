@@ -1,0 +1,7 @@
+std_msgs/String string
+---
+std_msgs/Bool result
+std_msgs/String result_str
+---
+std_msgs/Int32 status
+std_msgs/String status_str

@@ -1,0 +1,62 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(itia_msgs)
+
+## Find catkin macros and libraries
+## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+## is used, also find other catkin packages
+find_package( catkin REQUIRED COMPONENTS
+  	  	    geometry_msgs
+		    roscpp
+		    std_msgs
+		    kdl_conversions
+		    eigen_conversions
+		    tf_conversions
+		    message_generation
+		    cmake_modules
+		   )
+
+find_package(orocos_kdl REQUIRED)
+
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  Float64Stamped.msg
+  MotionStamped.msg
+  MotionRequest.msg
+)
+
+## Generate services in the 'srv' folder
+add_service_files(
+  FILES
+  send_bool.srv
+  send_float64.srv
+  send_string.srv
+)
+
+## Generate actions in the 'action' folder
+# add_action_files(
+#   FILES
+#   Action1.action
+#   Action2.action
+# )
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+	DEPENDENCIES
+	std_msgs geometry_msgs
+)
+
+
+catkin_package(
+  INCLUDE_DIRS include
+#  LIBRARIES flexicast_msg
+  CATKIN_DEPENDS geometry_msgs roscpp std_msgs kdl_conversions eigen_conversions tf_conversions cmake_modules
+  DEPENDS system_lib orocos_kdl
+)
+
+
+include_directories(include)
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  ${orocos_kdl_INCLUDE_DIRS}
+)

@@ -1,0 +1,6 @@
+std_msgs/String base_config
+std_msgs/String new_config
+std_msgs/String[] config_par_names
+std_msgs/String[] config_par_values
+---
+std_msgs/String result_str

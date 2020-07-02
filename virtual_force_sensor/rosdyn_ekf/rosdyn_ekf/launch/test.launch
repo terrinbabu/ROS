@@ -1,0 +1,5 @@
+<launch>
+
+    <rosparam command="load" file="$(find rosdyn_ekf)/config/test.yaml" />
+    <node pkg="rosdyn_ekf" type="rosdyn_ekf_node" name="rosdyn_ekf_node"  output="screen" />
+</launch>

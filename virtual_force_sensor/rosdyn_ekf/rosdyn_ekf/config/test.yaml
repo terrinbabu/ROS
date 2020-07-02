@@ -1,0 +1,6 @@
+ekf:
+  sigma0: 5000
+  sigma1: 20
+
+  r_q: 1
+  r_dq: 0.01

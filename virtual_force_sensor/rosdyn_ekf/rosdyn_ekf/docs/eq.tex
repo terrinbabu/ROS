@@ -1,0 +1,141 @@
+\documentclass{paper}
+\onecolumn
+
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb} % assumes amsmath package installed
+\usepackage{graphicx}      % include this line if your document contains 
+\DeclareMathOperator*{\sign}{sign}
+
+\begin{document}
+
+\title{rosdyn EKF}
+\maketitle
+
+\section{Dynamics}
+Robot dynamics is normally model with an additive static friction (namely, the breakaway friction depends on $\sign(q)$.
+However, static friction is not derivable when $\sign(q_i)=0$, which is required by the EKF.
+To overcome this issue, a LuGre model is introduced. The LuGre model's internal state is not considered part of the observed state.
+
+The motor torque is:
+\begin{equation}
+\tau=\tau_d+\tau_{f}(z,\dot{q})
+\label{eq:tau}
+\end{equation}
+where $\tau_{f}(z,\dot{q})$ is the friction torque, $\tau_d$ is the component due to gravitation, Coriolis and inertial terms:
+\begin{equation}
+\tau_d=B(q)\ddot{q}+NL(q,\dot{q})
+\label{eq:tau_dyn}
+\end{equation}
+where $B(q)$ is the inertia matrix, $NL(q,\dot{q})$ is the sum of gravitational part and Coriolis effect.
+
+The forward dynamics equation is:
+\begin{equation}
+\ddot{q}=B(q)^{-1}\left(\tau_d-NL(q,\dot{q})-\tau_f(z,\dot{q})\right)
+\end{equation}
+
+The state equation is
+\begin{equation}
+\frac{d}{dt}\left[\begin{array}{c}
+q\\
+\dot{q}
+\end{array}\right]
+=
+\left[\begin{array}{cc}
+\dot{q}\\
+B(q)^{-1}\left(\tau_d-NL(q,\dot{q})-\tau_f(z,\dot{q})\right)
+\end{array}\right]
+\end{equation}
+\subsection{Jacobians}
+Jacobians of (\ref{eq:tau_dyn}) w.r.t. $q$ and $\dot{q}$ are to complex to be computed analytically, therefore a numerical derivation is needed.
+\begin{equation}
+\frac{\partial\ddot{q}}{\partial q}=NUMERIAL
+\end{equation}
+\begin{equation}
+\frac{\partial\ddot{q}}{\partial \dot{q}}=NUMERIAL
+\end{equation}
+
+Jacobian of (\ref{eq:tau_dyn}) w.r.t $\ddot{q}$ is the inertia matrix.
+\begin{equation}
+\frac{\partial\tau_d}{\partial \ddot{q}}=B(q)
+\end{equation}
+
+
+
+\section{LuGre Model}
+Note: $z$ is supposed to be know. It is not part of observed states
+\begin{equation}
+\left\lbrace
+\begin{aligned}
+& g(\dot{q}) = c_0\\
+& f(\dot{q}) = c_1 \dot{q}\\
+\end{aligned}
+\right.
+\end{equation}
+\begin{equation}
+\left\lbrace
+\begin{aligned}
+& \dot{z} = \dot{q} - \sigma_0 \frac{\left|\dot{q}\right|}{c_0} z\\
+& \tau_{f}(z,\dot{q}) = \sigma_0 z  + \sigma_1 \dot{z} + c_1\dot{q}.
+\end{aligned}
+\right.
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{aligned}
+& \dot{z} = \dot{q} - \sigma_0 \frac{\left|\dot{q}\right|}{c_0} z\\
+& \tau_{f}(z,\dot{q}) = \sigma_0 z -\sigma_1\sigma_0 \frac{\left|\dot{q}\right|}{c_0} z + \sigma_1 \dot{q} + c_1\dot{q}.
+\end{aligned}
+\right.
+\end{equation}
+
+
+\begin{equation}
+\left\lbrace
+\begin{aligned}
+& \dot{z} = \dot{q} - \sigma_0 \frac{\left|\dot{q}\right|}{c_0} z\\
+& \tau_{f}(z,\dot{q}) = \sigma_0 z\left(I -\sigma_1 \frac{\left|\dot{q}\right|}{c_0}\right) + \sigma_1 \dot{q} + c_1\dot{q}.
+\end{aligned}
+\right.
+\end{equation}
+
+
+
+\subsection{Jacobians}
+
+\begin{equation}
+\begin{aligned}
+\frac{\partial z}{\partial \dot{q}}&=I-\sign{\dot{q}}\frac{\sigma_0}{c_0}z\\
+\frac{\partial z}{\partial z}&=-\sigma_0\frac{|\dot{q}|}{c_0}
+\end{aligned}
+\end{equation}
+
+
+\begin{equation}
+\begin{aligned}
+\frac{\partial F}{\partial \dot{q}}&=-\frac{\sigma_0\sigma_1}{c_0}\sign(\dot{q}) z +\sigma_1+c_1\\
+\frac{\partial F}{\partial z}&=\sigma_0\left(I -\sigma_1 \frac{\left|\dot{q}\right|}{c_0}\right)
+\end{aligned}
+\end{equation}
+
+\subsection{Equilibrium point}
+
+\begin{equation}
+\dot{z} = \dot{q} - \sigma_0 \frac{\left|\dot{q}\right|}{c_0} z=0
+\end{equation}
+
+\begin{equation}
+z=\frac{c_0 \sign(\dot{q})}{\sigma_0}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\tau_{f}(z,\dot{q}) &= c_0\sign(\dot{q}) \left(I -\sigma_1 \frac{\left|\dot{q}\right|}{c_0}\right) + \sigma_1 \dot{q} + c_1\dot{q}\\
+ &= c_0\sign(\dot{q}) -\sigma_1 \dot{q} + \sigma_1 \dot{q} + c_1\dot{q}\\
+ &= c_0\sign(\dot{q}) + c_1\dot{q}
+\end{aligned}
+\end{equation}
+
+
+
+\end{document}

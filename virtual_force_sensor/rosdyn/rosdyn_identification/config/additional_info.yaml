@@ -1,0 +1,81 @@
+cybersort:
+  joint_names: 
+  - ur10_shoulder_pan_joint
+  - ur10_shoulder_lift_joint
+  - ur10_elbow_joint
+  - ur10_wrist_1_joint
+  - ur10_wrist_2_joint
+  - ur10_wrist_3_joint
+  base_link: "ur10_base_link"
+  tool_link: "ur10_tool0"
+  gravity: [0, 0, -9.806]
+  
+
+  ur10_shoulder_pan_joint :
+
+    friction:
+      type: "Polynomial1"
+      constants: 
+        max_velocity: 10
+        min_velocity: 1.0e-6
+      coefficients:
+        viscous: 0
+        coloumb: 0
+  ur10_shoulder_lift_joint:
+
+    friction:
+      type: "Polynomial2"
+      constants: 
+        max_velocity: 10
+        min_velocity: 1.0e-10
+      coefficients:
+        first_order_viscous: 0
+        second_order_viscous: 0
+        coloumb: 50
+        
+  ur10_elbow_joint:
+
+    friction:
+      type: "Ideal"
+    friction:
+      type: "Polynomial2"
+      constants: 
+        max_velocity: 10
+        min_velocity: 1.0e-1
+      coefficients:
+        first_order_viscous: 0
+        second_order_viscous: 1
+        coloumb: 50
+  ur10_wrist_1_joint:
+    friction:
+      type: "Polynomial1"
+      constants: 
+        max_velocity: 10
+        min_velocity: 1.0e-10
+      coefficients:
+        viscous: 0
+        coloumb: 0
+        
+  ur10_wrist_2_joint:
+
+    friction:
+      type: "Polynomial1"
+      constants: 
+        max_velocity: 10
+        min_velocity: 1.0e-10
+      coefficients:
+        viscous: 0
+        coloumb: 0
+        
+  ur10_wrist_3_joint:
+
+    friction:
+      type: "Polynomial1"
+      constants: 
+        max_velocity: 10
+        min_velocity: 1.0e-10
+      coefficients:
+        viscous: 0
+        coloumb: 0
+        
+      

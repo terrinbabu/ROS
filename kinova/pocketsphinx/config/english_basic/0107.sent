@@ -1,0 +1,22 @@
+<s> UP </s>
+<s> DOWN </s>
+<s> LEFT </s>
+<s> RIGHT </s>
+<s> BACK </s>
+<s> FRONT </s>
+<s> CLOSE </s>
+<s> OPEN </s>
+<s> CLOCKWISE </s>
+<s> ANTICLOCKWISE </s>
+<s> LONG </s>
+<s> SMALL </s>
+<s> MEDIUM </s>
+<s> COMMAND </s>
+<s> FINISH </s>
+<s> TOP GRASP </s>
+<s> SIDE GRASP </s>
+<s> HOME POSITION </s>
+<s> FIRST POSITION </s>
+<s> SECOND POSITION </s>
+<s> THIRD POSITION </s>
+<s> PICK BOTTLE </s>

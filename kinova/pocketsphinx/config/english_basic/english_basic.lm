@@ -1,0 +1,126 @@
+Language model created by QuickLM on Mon Dec  4 10:39:12 EST 2017
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 22 sentences and 27 words
+
+\data\
+ngram 1=27
+ngram 2=47
+ngram 3=29
+
+\1-grams:
+-0.8219 </s> -0.3010
+-0.8219 <s> -0.2301
+-2.1644 ANTICLOCKWISE -0.2301
+-2.1644 BACK -0.2301
+-2.1644 BOTTLE -0.2301
+-2.1644 CLOCKWISE -0.2301
+-2.1644 CLOSE -0.2301
+-2.1644 COMMAND -0.2301
+-2.1644 DOWN -0.2301
+-2.1644 FINISH -0.2301
+-2.1644 FIRST -0.2890
+-2.1644 FRONT -0.2301
+-1.8633 GRASP -0.2301
+-2.1644 HOME -0.2890
+-2.1644 LEFT -0.2301
+-2.1644 LONG -0.2301
+-2.1644 MEDIUM -0.2301
+-2.1644 OPEN -0.2301
+-2.1644 PICK -0.2980
+-1.5623 POSITION -0.2301
+-2.1644 RIGHT -0.2301
+-2.1644 SECOND -0.2890
+-2.1644 SIDE -0.2950
+-2.1644 SMALL -0.2301
+-2.1644 THIRD -0.2890
+-2.1644 TOP -0.2950
+-2.1644 UP -0.2301
+
+\2-grams:
+-1.6435 <s> ANTICLOCKWISE 0.0000
+-1.6435 <s> BACK 0.0000
+-1.6435 <s> CLOCKWISE 0.0000
+-1.6435 <s> CLOSE 0.0000
+-1.6435 <s> COMMAND 0.0000
+-1.6435 <s> DOWN 0.0000
+-1.6435 <s> FINISH 0.0000
+-1.6435 <s> FIRST 0.0000
+-1.6435 <s> FRONT 0.0000
+-1.6435 <s> HOME 0.0000
+-1.6435 <s> LEFT 0.0000
+-1.6435 <s> LONG 0.0000
+-1.6435 <s> MEDIUM 0.0000
+-1.6435 <s> OPEN 0.0000
+-1.6435 <s> PICK 0.0000
+-1.6435 <s> RIGHT 0.0000
+-1.6435 <s> SECOND 0.0000
+-1.6435 <s> SIDE 0.0000
+-1.6435 <s> SMALL 0.0000
+-1.6435 <s> THIRD 0.0000
+-1.6435 <s> TOP 0.0000
+-1.6435 <s> UP 0.0000
+-0.3010 ANTICLOCKWISE </s> -0.3010
+-0.3010 BACK </s> -0.3010
+-0.3010 BOTTLE </s> -0.3010
+-0.3010 CLOCKWISE </s> -0.3010
+-0.3010 CLOSE </s> -0.3010
+-0.3010 COMMAND </s> -0.3010
+-0.3010 DOWN </s> -0.3010
+-0.3010 FINISH </s> -0.3010
+-0.3010 FIRST POSITION 0.0000
+-0.3010 FRONT </s> -0.3010
+-0.3010 GRASP </s> -0.3010
+-0.3010 HOME POSITION 0.0000
+-0.3010 LEFT </s> -0.3010
+-0.3010 LONG </s> -0.3010
+-0.3010 MEDIUM </s> -0.3010
+-0.3010 OPEN </s> -0.3010
+-0.3010 PICK BOTTLE 0.0000
+-0.3010 POSITION </s> -0.3010
+-0.3010 RIGHT </s> -0.3010
+-0.3010 SECOND POSITION 0.0000
+-0.3010 SIDE GRASP 0.0000
+-0.3010 SMALL </s> -0.3010
+-0.3010 THIRD POSITION 0.0000
+-0.3010 TOP GRASP 0.0000
+-0.3010 UP </s> -0.3010
+
+\3-grams:
+-0.3010 <s> ANTICLOCKWISE </s>
+-0.3010 <s> BACK </s>
+-0.3010 <s> CLOCKWISE </s>
+-0.3010 <s> CLOSE </s>
+-0.3010 <s> COMMAND </s>
+-0.3010 <s> DOWN </s>
+-0.3010 <s> FINISH </s>
+-0.3010 <s> FIRST POSITION
+-0.3010 <s> FRONT </s>
+-0.3010 <s> HOME POSITION
+-0.3010 <s> LEFT </s>
+-0.3010 <s> LONG </s>
+-0.3010 <s> MEDIUM </s>
+-0.3010 <s> OPEN </s>
+-0.3010 <s> PICK BOTTLE
+-0.3010 <s> RIGHT </s>
+-0.3010 <s> SECOND POSITION
+-0.3010 <s> SIDE GRASP
+-0.3010 <s> SMALL </s>
+-0.3010 <s> THIRD POSITION
+-0.3010 <s> TOP GRASP
+-0.3010 <s> UP </s>
+-0.3010 FIRST POSITION </s>
+-0.3010 HOME POSITION </s>
+-0.3010 PICK BOTTLE </s>
+-0.3010 SECOND POSITION </s>
+-0.3010 SIDE GRASP </s>
+-0.3010 THIRD POSITION </s>
+-0.3010 TOP GRASP </s>
+
+\end\

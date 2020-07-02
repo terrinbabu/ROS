@@ -1,0 +1,31 @@
+up
+down
+left
+right
+back
+front
+
+close
+open
+
+clockwise
+anticlockwise
+
+long
+small
+medium
+
+command
+finish
+
+top grasp
+side grasp
+
+home position
+first position
+second position
+third position
+
+pick bottle
+
+

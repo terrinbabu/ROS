@@ -1,0 +1,28 @@
+<launch>
+
+<!--  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+    <param name="lm" value="$(find pocketsphinx)/0.4/demo/voice_cmd.lm"/>
+    <param name="dict" value="$(find pocketsphinx)/0.4/demo/voice_cmd.dic"/>
+  </node>
+
+  <node name="voice_cmd_vel" pkg="pocketsphinx" type="voice_cmd_vel.py" output="screen"/>-->
+
+  <arg name="english_voice_input" default="false"/>
+  
+  <group if="$(arg english_voice_input)">
+    <node name="recognizer" pkg="pocketsphinx" type="recognizer.py" output="screen">
+      <param name="mic_name" value="alsa_input.pci-0000_00_1b.0.analog-stereo"/>
+      <param name="lm" value="$(find pocketsphinx)/config/english_basic/english_basic.lm"/>
+      <param name="dict" value="$(find pocketsphinx)/config/english_basic/english_basic.dic"/>
+    </node>
+  </group>
+  
+  <group unless="$(arg english_voice_input)">
+    <node name="recognizer" pkg="pocketsphinx" type="recognizer.py" output="screen">
+      <param name="mic_name" value="alsa_input.pci-0000_00_1b.0.analog-stereo"/>
+      <param name="lm" value="$(find pocketsphinx)/config/italian_basic/italian_basic.lm"/>
+      <param name="dict" value="$(find pocketsphinx)/config/italian_basic/italian_basic.dic"/>
+    </node>
+  </group>
+  
+</launch>

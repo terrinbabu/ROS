@@ -1,0 +1,22 @@
+pronto
+lato afferra 
+sopra afferra
+grande 
+piccolo
+solleva
+abbassa
+indietro
+avanti
+lontano
+vicino
+apri
+stringi
+ruota positivo
+ruota negativo
+medio
+posizione casa
+posizione prima
+posizione seconda
+posizione terza
+posizione faccia
+stop

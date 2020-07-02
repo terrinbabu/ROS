@@ -1,0 +1,31 @@
+<launch>
+
+<!--    -       -->
+<!--  arg       --> 
+<!--    -       -->
+
+
+
+<!--    -               -->  
+<!--  rosparam / param  --> 
+<!--    -               -->
+
+
+
+<!--    -       -->
+<!--  node      --> 
+<!--    -       -->  
+
+
+
+  <!-- Start the test -->
+  <node name="tf_to_hand" pkg="itia_kinova" type="tf_to_hand" output="screen" >
+  </node>
+
+  
+<!--    -       -->
+<!--  include   --> 
+<!--    -       -->
+  
+  
+</launch>

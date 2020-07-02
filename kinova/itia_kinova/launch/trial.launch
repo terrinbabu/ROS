@@ -1,0 +1,58 @@
+<launch>
+
+  <!-- ompl or stomp --> 
+  <arg name="pipeline" default="ompl" />   
+  
+  
+  <!-- rviz or gazebo graphical interface -->
+  <arg name="gazebo_gui" default="false"/>
+  <arg name="rviz_gui" default="true"/> 
+  
+  <!-- for moveit: fake_controller:=true, gazebo_controller:= false
+       for gazebo: fake_controller:=false, gazebo_controller:=true
+       for robot:  fake_controller:=false, gazebo_controller:=false --> 
+  
+  <arg name="fake_controller" default="true" />
+  <arg name="gazebo_controller" default="false" />
+  
+  <rosparam command="load" file="$(find itia_kinova)/config/planning_scene_config.yaml"/>
+
+  <include file="$(find itia_kinova)/launch/kinova_j2n6s300.launch">
+    <arg name="pipeline" default="$(arg pipeline)" />   
+    <arg name="gazebo_gui" default="$(arg gazebo_gui)"/> 
+    <arg name="rviz_gui" default="$(arg rviz_gui)"/> 
+    <arg name="fake_controller" default="$(arg fake_controller)" />   
+    <arg name="gazebo_controller" default="$(arg gazebo_controller)" />
+    </include>
+
+  <group if="$(arg fake_controller)">
+  <node name="trial" pkg="itia_kinova" type="trial" output="screen" >
+    <rosparam command="load" file="$(find itia_kinova)/config/kinova_grasp_data.yaml"/>  
+    <param name="gazebo" value="$(arg gazebo_controller)"/>
+    <param name="fake" value="$(arg fake_controller)"/>
+  </node>
+  </group>
+  
+  <group unless="$(arg fake_controller)">
+  <group if="$(arg gazebo_controller)">    
+  <node name="trial" pkg="itia_kinova" type="trial" output="screen" >
+    <rosparam command="load" file="$(find itia_kinova)/config/kinova_grasp_data.yaml"/>  
+    <param name="gazebo" value="$(arg gazebo_controller)"/>
+    <param name="fake" value="$(arg fake_controller)"/>
+    <remap from="/joint_states" to="/j2n6s300/joint_states"/> 
+  </node>
+  </group>
+  </group>
+  
+  <group unless="$(arg fake_controller)">
+  <group unless="$(arg gazebo_controller)">    
+  <node name="trial" pkg="itia_kinova" type="trial" output="screen" >
+    <rosparam command="load" file="$(find itia_kinova)/config/kinova_grasp_data.yaml"/>  
+    <param name="gazebo" value="$(arg gazebo_controller)"/>
+    <param name="fake" value="$(arg fake_controller)"/>  
+    <remap from="/joint_states" to="/j2n6s300_driver/out/joint_state"/> 
+  </node>
+  </group>
+  </group>
+  
+</launch>

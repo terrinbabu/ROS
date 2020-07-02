@@ -1,0 +1,8 @@
+<launch>
+
+  <rosparam command="load" file="$(find itia_kinova)/config/planning_scene_objects_info.yaml"/>
+  
+  <node name="pomdp_tsr_with_constraint" pkg="itia_kinova" type="pomdp_tsr_with_constraint" output="screen" >
+  </node>
+  
+</launch>

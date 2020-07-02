@@ -1,0 +1,10 @@
+<launch>
+  
+  <rosparam command="load" file="$(find itia_kinova)/config/planning_scene_config.yaml"/>
+
+
+  <node name="pomdp_publishers" pkg="itia_kinova" type="pomdp_publishers" output="screen" >
+    <rosparam command="load" file="$(find itia_kinova)/config/kinova_grasp_data.yaml"/>  
+  </node>
+
+</launch>

@@ -1,0 +1,26 @@
+base_link: 'root'
+
+# =====================================================
+gripper:
+  end_effector_name: 'gripper'
+
+  #actuated joints in end effector
+  joints: ['j2n6s300_joint_6']
+
+  #open position
+  pregrasp_posture: [0.0095]
+  pregrasp_time_from_start: 4.0
+
+  #close position
+  grasp_posture: [-0.0125]
+  grasp_time_from_start: 4.0
+
+  #desired pose from end effector to grasp - [x,y,z]
+  grasp_pose_to_eef: [0.06, 0, -0.03] #[0.06, 0, 0.02]
+
+  #desired pose from end effector to grasp - [r, p, y]
+  grasp_pose_to_eef_rotation: [1.5708, 0, 0] # 1.5707 = PI/2
+
+  #end_effector_parent_link: 'j2n6s300_link_6'
+  
+  end_effector_parent_link: 'j2n6s300_end_effector'

@@ -1,0 +1,56 @@
+home_arm_trajectory:
+  positions:
+  - [0.0, -3.14, -1.21, 0.0, 0.0, 0.0]
+  time_from_start:
+  - 0.1
+  joint_names:
+  - j2n6a300_joint_1
+  - j2n6a300_joint_2
+  - j2n6a300_joint_3
+  - j2n6a300_joint_4
+  - j2n6a300_joint_5
+  - j2n6a300_joint_6
+
+home_hand_trajectory:
+  positions:
+  - [0.0, 0.0, 0.0]  
+  time_from_start:
+  - 0.1
+  joint_names:
+  - j2n6a300_joint_finger_1
+  - j2n6a300_joint_finger_2
+  - j2n6a300_joint_finger_3
+  
+close_hand_trajectory:
+  positions:
+  - [0.3, 0.3, 0.3]
+  time_from_start:
+  - 15.0
+  joint_names:
+  - j2n6a300_joint_finger_1
+  - j2n6a300_joint_finger_2
+  - j2n6a300_joint_finger_3  
+  
+open_hand_trajectory:
+  positions:
+  - [0.0, 0.0, 0.0]
+  time_from_start:
+  - 40.0
+  joint_names:
+  - j2n6a300_joint_finger_1
+  - j2n6a300_joint_finger_2
+  - j2n6a300_joint_finger_3
+
+move_arm_trajectory:
+  positions:
+  - [0.196, 1.82, -1.577, 2.342, -1.841, 0.833]
+  time_from_start:
+  - 0.1
+  joint_names:
+  - j2n6a300_joint_1
+  - j2n6a300_joint_2
+  - j2n6a300_joint_3
+  - j2n6a300_joint_4
+  - j2n6a300_joint_5
+  - j2n6a300_joint_6
+

@@ -1,0 +1,9 @@
+scene_configuration:
+  table:
+    id: table
+    parent: root
+    rgba: [0,0,255,1.0]
+    position: [0.825,-0.30,-0.0625]  
+    orientation: [1, 0, 0, 0]
+    type: box
+    dimensions: [1.85, 0.80, 0.025]  

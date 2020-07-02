@@ -1,0 +1,10 @@
+
+
+<launch>
+  <rosparam command="load" file="$(find itia_kinova)/config/Precd_const_list.yaml"/>
+ <node name="precedence_const" pkg="itia_kinova" type="precedence_const" output="screen" >
+   <rosparam command="load" file="$(find itia_kinova)/config/planning_scene_config.yaml"/>
+    
+  </node>
+  
+</launch>

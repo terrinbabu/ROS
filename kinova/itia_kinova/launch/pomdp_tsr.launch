@@ -1,0 +1,31 @@
+<launch>
+
+<!--    -       -->
+<!--  arg       --> 
+<!--    -       -->
+
+
+
+<!--    -               -->  
+<!--  rosparam / param  --> 
+<!--    -               -->
+
+
+
+<!--    -       -->
+<!--  node      --> 
+<!--    -       -->  
+
+
+
+  <!-- Start the test -->
+  <node name="pomdp_tsr" pkg="itia_kinova" type="pomdp_tsr" output="screen" >
+  </node>
+
+  
+<!--    -       -->
+<!--  include   --> 
+<!--    -       -->
+  
+  
+</launch>

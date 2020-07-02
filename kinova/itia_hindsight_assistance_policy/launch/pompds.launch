@@ -1,0 +1,5 @@
+<launch>
+    <node name="robotpathgeneration" pkg="itia_hindsight_assistance_policy" type="robotpathgeneration" respawn="false" output="screen">
+        <param name="leastprob_isactive" value="false" type="bool"/> 
+    </node>
+</launch>

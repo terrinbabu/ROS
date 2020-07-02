@@ -1,0 +1,7 @@
+<launch>
+    <arg name="hand" default="L"/>
+
+    <node name="hum_goal_prediction_t2" pkg="itia_human_prediction" type="humpred.py" respawn="false" output="screen">
+        <param name="user_hand" value="$(arg hand)"/>
+    </node> 
+</launch>

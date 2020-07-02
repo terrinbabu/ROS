@@ -1,0 +1,31 @@
+<launch>
+
+<!--    -       -->
+<!--  arg       --> 
+<!--    -       -->
+
+
+
+<!--    -               -->  
+<!--  rosparam / param  --> 
+<!--    -               -->
+
+
+
+<!--    -       -->
+<!--  node      --> 
+<!--    -       -->  
+
+
+
+  <!-- Start the test -->
+  <node name="calculate_length" pkg="itia_kinova" type="calculate_length" output="screen" >
+  </node>
+
+  
+<!--    -       -->
+<!--  include   --> 
+<!--    -       -->
+  
+  
+</launch>

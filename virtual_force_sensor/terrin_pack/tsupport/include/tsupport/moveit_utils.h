@@ -1,0 +1,609 @@
+#ifndef __MOVEIT_UTILS___H__
+#define __MOVEIT_UTILS___H__
+
+#include <moveit_msgs/PlanningScene.h>
+#include <moveit_msgs/AttachedCollisionObject.h>
+#include <geometry_msgs/Pose.h>
+
+#include <moveit/robot_state/conversions.h>
+
+/*#include <moveit_visual_tools/moveit_visual_tools.h>
+
+#include <actionlib/client/simple_action_client.h>
+#include <control_msgs/FollowJointTrajectoryAction.h>*/
+
+#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
+
+#include <tsupport/basic.h>
+#include <math.h>
+
+namespace tsupport
+{
+namespace moveit_utils
+{  
+
+/*void initVisualTool(moveit_visual_tools::MoveItVisualToolsPtr& visual_tools_)
+{
+  visual_tools_.reset(new moveit_visual_tools::MoveItVisualTools("world"));     // Load the Robot Viz Tools for publishing to Rviz      
+  visual_tools_->setLifetime(120.0);
+  visual_tools_->loadMarkerPub();  
+}
+
+void group_info(const std::string group_name,
+                moveit::planning_interface::MoveGroupInterface& group)
+{
+        ROS_INFO ( "%s Reference frame of the group -  %s : %s", BOLDCYAN ,group_name.c_str(), group.getPlanningFrame().c_str() );
+        ROS_INFO ( "%s Current Position of the group - %s : [%f %f %f] ", BOLDCYAN ,group_name.c_str(), group.getCurrentPose().pose.position.x, group.getCurrentPose().pose.position.y, group.getCurrentPose().pose.position.z );
+        ROS_INFO ( "%s Current Orientation of the group - %s : [%f %f %f %f] ", BOLDCYAN ,group_name.c_str(), group.getCurrentPose().pose.orientation.w, group.getCurrentPose().pose.orientation.x, group.getCurrentPose().pose.orientation.y, group.getCurrentPose().pose.orientation.z );
+}
+
+void getcurrentpose(geometry_msgs::Pose& pose,
+                    moveit::planning_interface::MoveGroupInterface& group)
+{
+    pose.position.x = group.getCurrentPose().pose.position.x;
+    pose.position.y = group.getCurrentPose().pose.position.y;
+    pose.position.z = group.getCurrentPose().pose.position.z;
+    pose.orientation.w = group.getCurrentPose().pose.orientation.w;
+    pose.orientation.x = group.getCurrentPose().pose.orientation.x;
+    pose.orientation.y = group.getCurrentPose().pose.orientation.y;
+    pose.orientation.z = group.getCurrentPose().pose.orientation.z;
+}
+
+void getcurrentpose_euler(std::vector<double>& pose_euler,
+                          moveit::planning_interface::MoveGroupInterface& group)
+{
+    double qw = group.getCurrentPose().pose.orientation.w;
+    double qx = group.getCurrentPose().pose.orientation.x;
+    double qy = group.getCurrentPose().pose.orientation.y;
+    double qz = group.getCurrentPose().pose.orientation.z;
+    double roll,pitch,yaw;
+    
+    itia::support::QuadtoEuler(qw,qx,qy,qz,roll,pitch,yaw);
+
+    pose_euler[0] = group.getCurrentPose().pose.position.x;
+    pose_euler[1] = group.getCurrentPose().pose.position.y;
+    pose_euler[2] = group.getCurrentPose().pose.position.z;
+    pose_euler[3] = roll;
+    pose_euler[4] = pitch;
+    pose_euler[5] = yaw;
+}
+*/
+
+bool addBox(ros::Publisher& planning_scene_diff_publisher, 
+	    const std::vector<double>& pose, 
+	    const std::vector<double>& orient, 
+	    const std::vector<double>& dim,
+	    const std::string& link_name,
+	    const std::string& frame_id,
+	    const std::string& object_id)
+{
+  moveit_msgs::AttachedCollisionObject attached_object;
+  attached_object.link_name = link_name; //"jaco2_link_hand";      
+  attached_object.object.header.frame_id = frame_id;//"world";
+  attached_object.object.id = object_id; //"bottle";
+
+  moveit_msgs::PlanningScene planning_scene1;
+
+  geometry_msgs::Pose object_pose;  
+  tsupport::basic::fromVecToPose(pose,orient,object_pose);
+
+  shape_msgs::SolidPrimitive primitive;
+  primitive.type = primitive.BOX;
+  primitive.dimensions.resize(3);
+  primitive.dimensions[0] = dim[0]; //0.08;
+  primitive.dimensions[1] = dim[1]; //0.08;
+  primitive.dimensions[2] = dim[2]; //0.26;
+
+  attached_object.object.primitives.push_back(primitive);
+  attached_object.object.primitive_poses.push_back(object_pose);
+
+  attached_object.object.operation = attached_object.object.ADD;
+  
+  planning_scene1.world.collision_objects.push_back(attached_object.object);
+  planning_scene1.is_diff = true;
+  planning_scene_diff_publisher.publish(planning_scene1);
+  sleep(2.0);
+  
+  return true;
+}
+
+/*bool addCylinder( ros::Publisher& planning_scene_diff_publisher, 
+                  const std::vector<double>& pos, 
+                  const std::vector<double>& orient, 
+                  const std::vector<double>& dim, // { height,radius }
+                  const std::string& link_name,
+                  const std::string& frame_id,
+                  const std::string& object_id)
+{
+  moveit_msgs::AttachedCollisionObject attached_object;
+  attached_object.link_name = link_name;     
+  attached_object.object.header.frame_id = frame_id;
+  attached_object.object.id = object_id;
+
+  moveit_msgs::PlanningScene planning_scene1;
+
+  geometry_msgs::Pose bottle_pose;  
+  itia::support::fromVecToPose(pos,orient,bottle_pose);
+
+  shape_msgs::SolidPrimitive primitive;
+  primitive.type = primitive.CYLINDER;
+  primitive.dimensions.resize(2);
+  primitive.dimensions[0] = dim[0];
+  primitive.dimensions[1] = dim[1];
+
+  attached_object.object.primitives.push_back(primitive);
+  attached_object.object.primitive_poses.push_back(bottle_pose);
+
+  attached_object.object.operation = attached_object.object.ADD;
+  
+    
+  planning_scene1.world.collision_objects.push_back(attached_object.object);
+  planning_scene1.is_diff = true;
+  planning_scene_diff_publisher.publish(planning_scene1);
+  sleep(2.0);
+  
+  return true;
+}
+
+bool invKin(const geometry_msgs::Pose& pose_value,
+            robot_model_loader::RobotModelLoader& robot_model_loader,
+            const std::string& arm_planning_group_name,
+            std::vector<double>& joint_value)
+{  
+  robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
+  robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));  
+  const robot_state::JointModelGroup* joint_model_group = kinematic_model->getJointModelGroup(arm_planning_group_name);
+  
+  bool found_ik;
+  
+  ROS_INFO(" ");
+  ROS_INFO("%s Pose: [%f %f %f][%f %f %f %f] ", BOLDCYAN, 
+           pose_value.position.x, 
+           pose_value.position.y, 
+           pose_value.position.z, 
+           pose_value.orientation.w, 
+           pose_value.orientation.x, 
+           pose_value.orientation.y, 
+           pose_value.orientation.z );
+  ROS_INFO(" ");
+  
+  found_ik = kinematic_state->setFromIK(joint_model_group, pose_value, 20, 0.5);
+
+  if (found_ik)
+  {
+    kinematic_state->copyJointGroupPositions(joint_model_group, joint_value);     
+
+    std::string temp =" Joints: [";
+    for(std::size_t i=0; i < joint_value.size(); ++i)
+    {
+      temp.append(std::to_string(joint_value[i]));
+      temp.append(" ");
+    }
+    temp.append("]");
+    ROS_INFO("%s%s",GREEN,temp.c_str());
+    return true;
+  }
+  else
+  {
+    ROS_INFO("%s Did not find IK solution", BOLDRED );
+    return false;
+  }
+}
+
+void forkin(robot_model_loader::RobotModelLoader& robot_model_loader,
+            const std::string& arm_planning_group_name,
+            const std::string& end_effector_name,
+            std::vector<double>& goal_joint,
+            geometry_msgs::Pose& forkin_pose)
+{
+  robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
+  robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
+  const robot_state::JointModelGroup* joint_model_group = kinematic_model->getJointModelGroup(arm_planning_group_name);
+  
+  kinematic_state->setJointGroupPositions(joint_model_group, goal_joint);
+  const Eigen::Affine3d &end_effector_state = kinematic_state->getGlobalLinkTransform(end_effector_name);
+  
+  Eigen::VectorXd eep_pose ( 3 );
+  eep_pose = end_effector_state.translation();
+  forkin_pose.position.x = eep_pose [0];
+  forkin_pose.position.y = eep_pose [1];
+  forkin_pose.position.z = eep_pose [2];
+  
+  Eigen::MatrixXd eep_rotation;
+  eep_rotation = end_effector_state.rotation();
+  double qw,qx,qy,qz;
+  itia::support::MatrixToQuad(eep_rotation,qw,qx,qy,qz);
+  forkin_pose.orientation.w = qw ;
+  forkin_pose.orientation.x = qx ;
+  forkin_pose.orientation.y = qy ;
+  forkin_pose.orientation.z = qz ;
+}
+
+bool allowCollisions(robot_model_loader::RobotModelLoader& robot_model_loader,
+                     const std::string& obj1,
+                     const std::string& obj2)
+{
+  ROS_INFO("%sallow collision between %s and %s",BOLDGREEN,obj1.c_str(),obj2.c_str());
+  robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
+  planning_scene::PlanningScene planning_scene2(kinematic_model);    
+  collision_detection::AllowedCollisionMatrix acm = planning_scene2.getAllowedCollisionMatrix();
+  acm.setEntry(obj1, obj2, true);
+}
+
+bool checkCollisions(robot_model_loader::RobotModelLoader& robot_model_loader,
+                     const std::string& name_group_name,
+                     const std::vector<double>& joint_value)
+{
+  itia::support::printString("Check for collision");
+      
+  robot_model::RobotModelConstPtr robot_model = robot_model_loader.getModel();
+  collision_detection::CollisionRequest collision_request;
+  planning_scene::PlanningScenePtr  planning_scene( new planning_scene::PlanningScene( robot_model ) );
+  collision_detection::CollisionResult collision_result; 
+  collision_detection::CollisionResult::ContactMap::const_iterator it;  
+
+  robot_state::RobotState robot_state_start(robot_model);
+  robot_state_start.setJointGroupPositions(name_group_name, joint_value);
+  robot_state_start.update();
+  
+  collision_request.contacts = true;
+  collision_request.max_contacts = 1000;
+    
+  collision_result.clear();
+  planning_scene->checkCollision(collision_request, collision_result, robot_state_start, planning_scene->getAllowedCollisionMatrix());
+  
+  if(collision_result.collision)
+  {
+    ROS_INFO(" %sIn collision", BOLDRED );
+    
+    for(it = collision_result.contacts.begin(); it != collision_result.contacts.end(); ++it)
+    {
+      ROS_INFO(" Contact between: %s and %s", it->first.first.c_str(), it->first.second.c_str());
+      return true;
+    }
+  }
+  else
+  {
+    ROS_INFO(" %sNot in collision", BOLDGREEN );
+    return false;
+  }
+}
+
+bool plan(moveit::planning_interface::MoveGroupInterface& group_arm,
+          std::vector<double>& goal_joint,
+          moveit::planning_interface::MoveGroupInterface::Plan& my_plan)
+{
+  
+  itia::support::printString("Planning");
+  ROS_INFO(" ");
+  ROS_INFO("Set the start position of the planner");
+  group_arm.setStartStateToCurrentState();
+  
+  ROS_INFO(" ");
+  ROS_INFO("Set the goal position of the planner");
+  group_arm.setJointValueTarget(goal_joint);
+  
+  moveit::planning_interface::MoveItErrorCode success = group_arm.plan(my_plan);
+  
+  if (!success)
+  {
+     ROS_ERROR("Not able to identify a plan");
+    return false;
+  }
+  if (success)
+  {
+     ROS_INFO("%s Success!! Success!! Success!! Success", BOLDGREEN );
+     return true;
+  }
+  
+  }
+  
+bool visualize(ros::NodeHandle& nh,
+               moveit::planning_interface::MoveGroupInterface& group_arm,
+               moveit::planning_interface::MoveGroupInterface::Plan& my_plan)
+{
+  ROS_INFO(" ");      
+  ROS_INFO("%s Visualizing plan ", BOLDCYAN );
+  
+  moveit_visual_tools::MoveItVisualToolsPtr visual_tools_;   // class for publishing stuff to rviz
+  initVisualTool(visual_tools_);
+  
+  const robot_state::JointModelGroup *joint_model_group = group_arm.getCurrentState()->getJointModelGroup(group_arm.getName());
+  visual_tools_->publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  visual_tools_->trigger();  
+  sleep(1.0);
+  
+  ros::Publisher display_publisher = nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
+  moveit_msgs::DisplayTrajectory display_trajectory;
+  
+  display_trajectory.trajectory_start = my_plan.start_state_;
+  display_trajectory.trajectory.push_back(my_plan.trajectory_);
+  display_publisher.publish(display_trajectory);
+  sleep(5.0);
+  if(itia::support::check())
+    return true;
+  else
+    return false;
+}
+void visualize_no_check(ros::NodeHandle& nh,
+               moveit::planning_interface::MoveGroupInterface& group_arm,
+               moveit::planning_interface::MoveGroupInterface::Plan& my_plan)
+{
+  ROS_INFO(" ");      
+  ROS_INFO("%s Visualizing plan ", BOLDCYAN );
+  
+  moveit_visual_tools::MoveItVisualToolsPtr visual_tools_;   // class for publishing stuff to rviz
+  initVisualTool(visual_tools_);
+  
+  const robot_state::JointModelGroup *joint_model_group = group_arm.getCurrentState()->getJointModelGroup(group_arm.getName());
+  visual_tools_->publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  visual_tools_->trigger();  
+  sleep(1.0);
+  
+  ros::Publisher display_publisher = nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
+  moveit_msgs::DisplayTrajectory display_trajectory;
+  
+  display_trajectory.trajectory_start = my_plan.start_state_;
+  display_trajectory.trajectory.push_back(my_plan.trajectory_);
+  display_publisher.publish(display_trajectory);
+  sleep(5.0);
+}
+
+bool plan_visualize_execute( ros::NodeHandle& nh,
+                             moveit::planning_interface::MoveGroupInterface& group_arm,
+                             std::vector<double>& goal_joint)
+{
+  
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  if (plan(group_arm,goal_joint,my_plan))  
+  {
+  moveit_visual_tools::MoveItVisualToolsPtr visual_tools_;   // class for publishing stuff to rviz
+  initVisualTool(visual_tools_);
+  
+  if (visualize(nh,group_arm,my_plan))
+  {
+  itia::support::printString("Execute");
+  group_arm.execute(my_plan);
+  }
+  
+  return true;
+  }
+  else 
+  return false;    
+}
+
+void plan_execute( moveit::planning_interface::MoveGroupInterface& group_arm,
+                   std::vector<double>& goal_joint)
+{
+  
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  plan(group_arm,goal_joint,my_plan);
+  
+  itia::support::printString("Execute");
+  group_arm.execute(my_plan);
+}
+
+void plan_trajectory_length(robot_model_loader::RobotModelLoader& robot_model_loader,
+                            const std::string& arm_planning_group_name,
+                            const std::string& end_effector_name,
+                            moveit::planning_interface::MoveGroupInterface::Plan& my_plan,
+                            double& st_line_length,
+                            double& my_plan_length )
+{ 
+  geometry_msgs::Pose temp_pose_1;
+  geometry_msgs::Pose temp_pose_2;
+  itia::moveit_utils::forkin(robot_model_loader,arm_planning_group_name,end_effector_name,my_plan.trajectory_.joint_trajectory.points[0].positions,temp_pose_1);
+  itia::moveit_utils::forkin(robot_model_loader,arm_planning_group_name,end_effector_name,my_plan.trajectory_.joint_trajectory.points[my_plan.trajectory_.joint_trajectory.points.size()-1].positions,temp_pose_2);
+  
+  st_line_length = sqrt(pow((temp_pose_2.position.x - temp_pose_1.position.x),2) + pow((temp_pose_2.position.y - temp_pose_1.position.y),2) + pow((temp_pose_2.position.z - temp_pose_1.position.z),2));
+
+  my_plan_length = 0;
+  
+  for( int i=0; i < my_plan.trajectory_.joint_trajectory.points.size()-1; i++)
+  {
+  geometry_msgs::Pose temp_pose_1;
+  geometry_msgs::Pose temp_pose_2;
+  itia::moveit_utils::forkin(robot_model_loader,arm_planning_group_name,end_effector_name,my_plan.trajectory_.joint_trajectory.points[i].positions,temp_pose_1);
+  itia::moveit_utils::forkin(robot_model_loader,arm_planning_group_name,end_effector_name,my_plan.trajectory_.joint_trajectory.points[i+1].positions,temp_pose_2);
+  
+  double step_dis = sqrt(pow((temp_pose_2.position.x - temp_pose_1.position.x),2) + pow((temp_pose_2.position.y - temp_pose_1.position.y),2) + pow((temp_pose_2.position.z - temp_pose_1.position.z),2));
+  my_plan_length = my_plan_length + step_dis;
+  }
+  
+}
+
+
+bool master_plan(robot_model_loader::RobotModelLoader& robot_model_loader,
+                 const std::string& arm_planning_group_name,
+                 const std::string& end_effector_name,
+                 moveit::planning_interface::MoveGroupInterface& group_arm,
+                 std::vector<double>& goal_joint,
+                 moveit::planning_interface::MoveGroupInterface::Plan& my_plan,
+                 int no_of_plans)
+{
+  std::vector<double> my_plan_length_array;
+  std::vector<moveit::planning_interface::MoveGroupInterface::Plan> my_plan_array;
+  my_plan_length_array.clear();
+  my_plan_array.clear();
+  
+  for(int i =0; i < no_of_plans; i++)
+  {
+    
+    group_arm.setStartStateToCurrentState();
+    group_arm.setJointValueTarget(goal_joint);
+    moveit::planning_interface::MoveItErrorCode success = group_arm.plan(my_plan);
+    if(!success)
+      continue;
+  
+    double my_plan_length,st_line_length;
+    itia::moveit_utils::plan_trajectory_length(robot_model_loader,arm_planning_group_name,end_effector_name,my_plan,st_line_length,my_plan_length);
+    my_plan_length_array.push_back(my_plan_length);
+    my_plan_array.push_back(my_plan);
+  }
+  
+   ROS_INFO (" %s number of plans : %zu",BOLDCYAN,my_plan_length_array.size());
+  
+  if(my_plan_length_array.size() == 0)
+    return false;
+  
+   itia::support::printvectordouble("plans_length_array",my_plan_length_array);
+    
+  double min_plan_length = my_plan_length_array[0];
+  int min_plan_length_array_no;
+  for(int i = 0; i != my_plan_length_array.size(); ++i)
+  {
+      if(my_plan_length_array[i] < min_plan_length)
+      {
+      min_plan_length = my_plan_length_array[i];
+      min_plan_length_array_no = i;
+      }
+  }
+  
+   ROS_INFO (" %s minimum plan trajectory length : %f and obtained at planning no. %d",BOLDCYAN,min_plan_length,min_plan_length_array_no+1);
+  my_plan = my_plan_array[min_plan_length_array_no];
+  return true;
+}
+
+
+void bottle_plan_execute  ( ros::NodeHandle& nh,
+                            ros::Publisher& planning_scene_diff_publisher,
+                            robot_model_loader::RobotModelLoader& robot_model_loader,
+                            const std::string arm_planning_group_name,
+                            const std::string hand_planning_group_name,
+                            const std::string end_effector_name,
+                            const std::vector<double>& box_pose,
+                            moveit::planning_interface::MoveGroupInterface& group_arm,
+                            moveit::planning_interface::MoveGroupInterface::Plan& my_plan,
+                            double fake, double gazebo)
+{     
+      itia::kinova_utils::openhand(fake,gazebo);
+        
+      ROS_INFO("%sAdding the bottle", BOLDCYAN);
+      std::vector<double> box_orient = {1, 0, 0, 0};
+      std::vector<double> box_dim = {0.08,0.08,0.26};
+      itia::moveit_utils::addBox(planning_scene_diff_publisher, box_pose, box_orient,box_dim,"world","world","bottle");
+
+// //       itia::support::printString("Grasping analysis");
+
+      moveit_simple_grasps::SimpleGraspsPtr simple_grasps_; 
+      moveit_simple_grasps::GraspData grasp_data_;
+      std::vector<moveit_msgs::Grasp> possible_grasps;
+      moveit_visual_tools::MoveItVisualToolsPtr visual_tools_;
+
+      itia::moveit_utils::initVisualTool(visual_tools_);
+
+      itia::grasp_utils::initGrasp(visual_tools_, simple_grasps_);
+
+      itia::grasp_utils::generatedGrasps( hand_planning_group_name, 
+                                          simple_grasps_, visual_tools_, 
+                                          grasp_data_, box_pose, box_orient, 
+                                          possible_grasps);
+
+      std::vector<moveit_msgs::Grasp> sorted_possible_grasps;
+      itia::grasp_utils::idMaxQualityGrasp(possible_grasps, false, sorted_possible_grasps);
+      int no_of_plans = 30;
+      int plan_check = 0;
+
+      for( int x = 0; x< sorted_possible_grasps.size(); x++ )
+      {  
+      itia::grasp_utils::visualizeGrasp(simple_grasps_, visual_tools_, grasp_data_, sorted_possible_grasps[x], hand_planning_group_name);
+      geometry_msgs::Pose best_grasp_pose = sorted_possible_grasps[x].grasp_pose.pose;
+
+
+// //       itia::support::printString("Inverse kinematics of selected pose");
+
+      std::vector<double> best_grasp_joint;
+
+      if (!itia::moveit_utils::invKin(best_grasp_pose,robot_model_loader,arm_planning_group_name,best_grasp_joint))
+           ROS_ERROR("Not able get inverse IK");
+
+      itia::support::printvectordouble("best_grasp_joint",best_grasp_joint);
+
+      itia::moveit_utils::allowCollisions(robot_model_loader,"bottle", hand_planning_group_name);
+
+      if (itia::moveit_utils::checkCollisions(robot_model_loader,arm_planning_group_name,best_grasp_joint))
+           ROS_ERROR("In collision");
+
+    if(itia::moveit_utils::master_plan(robot_model_loader,arm_planning_group_name,end_effector_name,group_arm,best_grasp_joint,my_plan,no_of_plans))
+    {
+      plan_check = 1;
+      break;
+    }
+  }    
+  
+  if (plan_check == 1)
+  {
+  double my_plan_length,st_line_length;
+  
+  itia::moveit_utils::plan_trajectory_length(robot_model_loader,arm_planning_group_name,end_effector_name,my_plan,st_line_length,my_plan_length);
+  
+// //   itia::support::printString("Execute");
+  group_arm.execute(my_plan);
+  
+// //   itia::kinova_utils::closehand(fake,gazebo);
+  }
+  else
+  ROS_ERROR("NO PLAN FOUND");
+}
+
+void twisttoJointtwist(moveit::planning_interface::MoveGroupInterface& group,
+                       robot_model_loader::RobotModelLoader& robot_model_loader,
+                       const std::string& arm_planning_group_name,
+                       const std::string& end_effector_name,
+                       std::vector<double>& twist,
+                       std::vector<double>& Jointvel)
+{   
+    Eigen::VectorXd received_twist_Eigen ( 6 );
+    
+    itia::support::StdVectoEignVec(twist,received_twist_Eigen);
+    
+    robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
+    robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
+    const robot_state::JointModelGroup* joint_model_group = kinematic_model->getJointModelGroup(arm_planning_group_name);
+    const robot_state::LinkModel* ee_link = kinematic_state->getLinkModel (end_effector_name );
+    
+    std::vector<double> current_joint_values; 
+    group.getCurrentState()->copyJointGroupPositions(group.getCurrentState()->getRobotModel()->getJointModelGroup(group.getName()), current_joint_values);
+//     itia::support::printvectordouble("group_joint_values",current_joint_values);
+//    
+//     std::vector<double> joint_values_before;
+//     kinematic_state->copyJointGroupPositions(joint_model_group, joint_values_before);
+//     
+//     itia::support::printvectordouble("kinematic_state_joint_values_before",joint_values_before);
+    
+    kinematic_state->setJointGroupPositions(joint_model_group, current_joint_values);
+    
+//     std::vector<double> joint_values_after;
+//     kinematic_state->copyJointGroupPositions(joint_model_group, joint_values_after);
+    
+//     itia::support::printvectordouble("kinematic_state_joint_values_after",joint_values_after);
+    
+    Eigen::VectorXd  joint_velocity ( 6 );
+    kinematic_state->computeVariableVelocity ( joint_model_group, joint_velocity, received_twist_Eigen, ee_link );
+    
+    for ( std::size_t j = 0; j < joint_velocity.size(); ++j )
+        Jointvel[j] = joint_velocity[j];
+}
+
+void twisttoPose(moveit::planning_interface::MoveGroupInterface& group,
+                 std::vector<double>& twist,
+                 double time_step,
+                 geometry_msgs::Pose& new_eep_pose)
+
+{
+        std::vector<double> change_in_eep_pose_E = {0, 0, 0, 0, 0, 0};
+        itia::support::vect_scalar_mulp(twist,time_step,change_in_eep_pose_E);
+        
+        std::vector<double> current_eep_pose_E = {0, 0, 0, 0, 0, 0};     
+        itia::moveit_utils::getcurrentpose_euler(current_eep_pose_E,group);
+        
+        std::vector<double> new_eep_pose_E = {0, 0, 0, 0, 0, 0};
+        itia::support::vect_vect_add(current_eep_pose_E,change_in_eep_pose_E,new_eep_pose_E);
+        
+        itia::support::fromVec_EulertoPose(new_eep_pose_E,new_eep_pose);
+}
+*/
+}
+}
+#endif

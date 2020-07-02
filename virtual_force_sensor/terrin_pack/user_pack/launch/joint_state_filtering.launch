@@ -1,0 +1,9 @@
+<launch>
+
+    <arg name="hz" default="25" />
+      
+    <node name="joint_state_filtering" pkg="user_pack" type="joint_state_filtering" output="screen">
+       <param name="hz" value="$(arg hz)"/>
+    </node>
+
+</launch>

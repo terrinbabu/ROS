@@ -1,0 +1,14 @@
+<launch>
+  
+  <param name="robot_description" textfile="/home/terrin/.ros/ur10_estimated.urdf"/>
+  <rosparam command="load" file="/home/terrin/.ros/ur10_estimated_P1_edited.yaml"/>
+  
+  <arg name="r_q" default="4" />
+  <arg name="r_dq" default="15" />
+      
+  <node name="kalman_filter_example" pkg="user_pack" type="kalman_filter_example" output="screen">
+       <param name="r_q"  value="$(arg r_q)"/>
+       <param name="r_dq" value="$(arg r_dq)"/>
+  </node>
+
+</launch>

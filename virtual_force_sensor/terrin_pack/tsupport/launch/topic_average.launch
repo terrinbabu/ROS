@@ -1,0 +1,5 @@
+<launch>
+
+    <node name="topic_average" pkg="tsupport" type="topic_average" output="screen" />
+
+</launch>

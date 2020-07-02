@@ -1,0 +1,10 @@
+<launch>
+  
+  <param name="robot_description" textfile="/home/terrin/.ros/ur10_estimated.urdf"/>
+  <rosparam command="load" file="/home/terrin/.ros/ur10_estimated_P1_edited.yaml"/>
+  
+  <node name="virtual_force_sensor_estimation" pkg="user_pack" type="virtual_force_sensor_estimation" output="screen">
+      <remap from="/joint_states" to="/kalman_filtered_joint_states"/> 
+  </node>
+  
+</launch>

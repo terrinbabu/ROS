@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <ros/ros.h>
+
+#include <moveit/move_group_interface/move_group_interface.h> 
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/robot_model_loader/robot_model_loader.h>
+#include <moveit/robot_state/robot_state.h>
+#include <moveit/robot_state/conversions.h>
+#include <moveit/robot_model/robot_model.h>
+
+#include <moveit_msgs/DisplayRobotState.h>
+#include <moveit_msgs/DisplayTrajectory.h>
+#include <moveit_msgs/RobotTrajectory.h>
+#include <moveit_msgs/AttachedCollisionObject.h>
+#include <moveit_msgs/CollisionObject.h>
+
+#include <geometry_msgs/PoseArray.h>
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseStamped.h>
+
+#include <support.h>
+#include <itia_moveit_utils.h>
+
+using namespace std;
+using namespace ros;
+
+int main(int argc, char **argv)
+{
+  
+  init(argc, argv,"trial");
+  NodeHandle nh;
+  AsyncSpinner spinner(1);
+  spinner.start(); 
+  sleep(10.0);
+  
+  support::print_cyan ("\n Group Info \n\n");
+  
+  const string arm_planning_group_name = "manipulator";
+  const string end_effector_name = "ee_link";
+  
+  moveit::planning_interface::MoveGroupInterface group_arm(arm_planning_group_name);
+
+  support::print_yellow ("Reference frame of the manipulator - ");
+  cout   << group_arm.getPlanningFrame().c_str() << endl;
+  
+  support::print_yellow ("Current Position of the manipulator - ");
+  cout   << "[ " << fixed << setprecision(2) 
+			<< group_arm.getCurrentPose().pose.position.x  << ","
+			<< group_arm.getCurrentPose().pose.position.y  << ","
+			<< group_arm.getCurrentPose().pose.position.z  << " ]" << endl;
+
+  support::print_yellow ("Current Orientation of the manipulator - ");
+  cout << "[ "  << fixed << setprecision(2)
+		 << group_arm.getCurrentPose().pose.orientation.w << ","
+		 << group_arm.getCurrentPose().pose.orientation.x << ","
+		 << group_arm.getCurrentPose().pose.orientation.y << ","
+		 << group_arm.getCurrentPose().pose.orientation.z << " ]" << endl;
+
+  vector<double> current_rotational_joint_values;
+  group_arm.getCurrentState()->copyJointGroupPositions(group_arm.getCurrentState()->getRobotModel()->getJointModelGroup(group_arm.getName()), current_rotational_joint_values);
+  support::printvectordouble("current_rotational_joint_values",current_rotational_joint_values);
+
+  support::print_cyan ("\n Adding the table \n\n");
+  std::vector<double> table_pose = {0,0,-0.025};
+  std::vector<double> table_orient = {1, 0, 0, 0};
+  std::vector<double> table_dim = {5, 5, 0.025};
+
+  ros::Publisher planning_scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
+  while(planning_scene_diff_publisher.getNumSubscribers() < 1)
+   sleep(0.5);
+ 
+  moveit_utils::addBox(planning_scene_diff_publisher, table_pose, table_orient,table_dim,"world","world","table");
+}

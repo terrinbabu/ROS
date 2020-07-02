@@ -1,0 +1,9 @@
+<launch>
+    
+    <arg name="file_name" default=" " />
+    
+    <node name="write_rostopic" pkg="user_pack" type="write_rostopic" output="screen">
+       <param name="file_name" value="$(arg file_name)"/>
+     <remap from="/joint_states" to="/kf_joint_states"/>
+    </node>
+</launch>

@@ -1,0 +1,8 @@
+<launch>
+    
+    <arg name="time" default="25" />
+      
+    <node name="sinusoidal_action" pkg="user_pack" type="sinusoidal_action" output="screen">
+       <param name="time" value="$(arg time)"/>
+    </node>
+</launch>

@@ -1,0 +1,4 @@
+<launch>
+<rosparam command="load" file="$(find user_pack)/config/kalman_filter_joint_state.yaml"/>
+  <node name="kalman_filter_joint_state" pkg="user_pack" type="kalman_filter_joint_state" output="screen" />
+</launch>

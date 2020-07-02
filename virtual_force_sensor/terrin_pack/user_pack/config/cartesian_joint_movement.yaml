@@ -1,0 +1,44 @@
+goal_1:
+    type_of_goal: 1
+    move:
+        x: 0.0 # red - +ve front (Note 1)
+        y: 0.0 # green - +ve right (Note 1)
+        z: 0.3 # blue - +ve up (Note 1)
+
+#goal_1:
+    #type_of_goal: 2
+    #move:
+        #j1: 2.15 # +ve right 
+        #j2: 0
+        #j3: 0
+        #j4: 0
+        #j5: 0
+        #j6: 0
+        #j1: -1.27
+        #j2: -2.14
+        #j3: -1.74
+        #j4: -1.59
+        #j5: 0.57
+        #j6: 0.7
+
+###### Nomenclature - Start #######
+
+## Note 1 : directions considering the position of the power cord of the robot facing you slighly towards your left and EE facing you
+
+##goal_1:  ## maximum 2 goals
+##  type_of_goal: 1 or 2 ## 1 - cartesian space goal or 2 - joint space goal
+##      move: 
+##          x: 0.1 ## for cartesian space goal
+##          y: 0.1
+##          z: 0.2 # positive z moves the EE upwards
+
+            ##or## 
+            
+##          j1: 0.1 ## for joint space goal
+##          j2: 0.1
+##          j3: 0.1
+##          j4: 0.1
+##          j5: 0.1
+##          j6: 0.1
+
+###### Nomenclature - End #######

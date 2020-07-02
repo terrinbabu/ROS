@@ -1,0 +1,4 @@
+<launch>
+<rosparam command="load" file="$(find user_pack)/config/cartesian_joint_movement.yaml"/>
+  <node name="cartesian_joint_movement" pkg="user_pack" type="cartesian_joint_movement" output="screen" />
+</launch>

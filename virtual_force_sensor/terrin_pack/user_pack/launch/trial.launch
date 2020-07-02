@@ -1,0 +1,39 @@
+<launch>
+
+    <node name="trial" pkg="user_pack" type="trial" output="screen" />
+    
+<!--    <param name="num_worker_threads" value="20"/>
+    
+    <param name="robot_description" textfile="/home/terrin/.ros/ur10_estimated.urdf"/>
+    
+    <node pkg="robot_state_publisher" name="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen"/>
+
+    <node pkg="rviz" name="$(anon rviz)" type="rviz" respawn="false" args="-d $(find ur10_moveit_config)/launch/moveit.rviz" output="screen"/>
+    <node pkg="rosdyn_core_examples" type="inverse_dynamics" name="inverse_dynamics"  output="screen" />
+    <node pkg="user_pack" name="planning_scene" type="planning_scene" output="screen"/>
+    
+	<arg name="fake" default="true" />
+
+    <include file="$(find ur10_moveit_config)/launch/planning_context.launch">
+        <arg name="load_robot_description" value="true"/>
+        <arg name="limited" value="true"/>
+    </include>
+  
+	 <include file="$(find ur10_moveit_config)/launch/move_group.launch"/>
+		 <arg name="fake_execution" value="$(eval arg('fake'))"/>
+	 </include>
+
+	<group if="$(eval arg('fake'))">		 
+		<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+			<param name="/use_gui" value="false"/>
+			<rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
+		</node> 
+	</group>
+
+	<group unless="$(eval arg('fake'))">		 
+		<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+			<param name="/use_gui" value="false"/>
+		</node> 
+	</group>-->
+    
+</launch>

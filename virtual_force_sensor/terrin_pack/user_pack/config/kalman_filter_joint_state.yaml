@@ -1,0 +1,19 @@
+std_dev:
+    q: 0.00001
+    Dq: 0.2
+    DDq: 2
+    tau: 25
+    
+motion_KF:
+    error_zero_tolerance: 0.000 # typical 0.002
+    P_gain: 5  # typical P=10,I=0,D=20 
+    I_gain: 0
+    D_gain: 17
+    
+tau_KF:
+    error_zero_tolerance: 0.000 # typical 5
+    P_gain: 20  # typical P=20,I=0,D=0.1 
+    I_gain: 0
+    D_gain: 0.1
+    
+
